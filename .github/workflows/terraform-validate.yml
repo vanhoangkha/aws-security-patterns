@@ -1,0 +1,23 @@
+name: Terraform Validate
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+      - name: Validate All Modules
+        run: |
+          for dir in $(find . -name "main.tf" -exec dirname {} \;); do
+            echo "Validating $dir"
+            terraform -chdir=$dir init -backend=false
+            terraform -chdir=$dir validate
+          done
