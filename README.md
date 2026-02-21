@@ -1,8 +1,15 @@
 # AWS Security Patterns
 
+[![License](https://img.shields.io/badge/License-MIT--0-green.svg)](LICENSE)
+[![AWS](https://img.shields.io/badge/AWS-Security-FF9900?logo=amazon-aws)](https://aws.amazon.com/security/)
+
 Collection of AWS security automation patterns based on [AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/securityandcompliance-pattern-list.html).
 
-## 📁 Structure
+## Overview
+
+![Security Patterns](docs/overview.png)
+
+## Structure
 
 ```
 ├── incident-response/      # Automated incident response & forensics
@@ -15,7 +22,7 @@ Collection of AWS security automation patterns based on [AWS Prescriptive Guidan
 └── container-security/     # Container image hardening, ECR scanning
 ```
 
-## 🛠️ Patterns Included
+## Patterns Included
 
 ### Incident Response
 - Automated incident response and forensics
