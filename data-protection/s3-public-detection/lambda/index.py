@@ -26,12 +26,12 @@ def remediate_bucket(bucket_name):
                 'RestrictPublicBuckets': True
             }
         )
-        notify(f"✅ Remediated public bucket: {bucket_name}")
+        notify(f"Remediated public bucket: {bucket_name}")
     except Exception as e:
-        notify(f"❌ Failed to remediate {bucket_name}: {str(e)}")
+        notify(f"Failed to remediate {bucket_name}: {str(e)}")
 
 def notify_only(bucket_name):
-    notify(f"⚠️ Public S3 bucket detected: {bucket_name}\nAuto-remediation disabled.")
+    notify(f"Public S3 bucket detected: {bucket_name}\nAuto-remediation disabled.")
 
 def notify(message):
     sns.publish(
