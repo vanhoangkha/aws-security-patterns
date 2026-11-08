@@ -63,7 +63,7 @@ resource "aws_sfn_state_machine" "incident_response" {
         Type     = "Task"
         Resource = "arn:aws:states:::sns:publish"
         Parameters = {
-          TopicArn = aws_sns_topic.security_incidents.arn
+          TopicArn    = aws_sns_topic.security_incidents.arn
           "Message.$" = "States.Format('Security Incident: {}', $.detail.type)"
         }
         End = true
@@ -109,8 +109,8 @@ resource "aws_iam_role" "step_functions" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "states.amazonaws.com" }
     }]
   })
@@ -124,8 +124,8 @@ resource "aws_iam_role_policy" "step_functions" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = ["lambda:InvokeFunction"]
+        Effect = "Allow"
+        Action = ["lambda:InvokeFunction"]
         Resource = [
           aws_lambda_function.isolate_resource.arn,
           aws_lambda_function.forensic_snapshot.arn,
@@ -147,8 +147,8 @@ resource "aws_iam_role" "eventbridge" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "events.amazonaws.com" }
     }]
   })
@@ -174,8 +174,8 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "lambda.amazonaws.com" }
     }]
   })

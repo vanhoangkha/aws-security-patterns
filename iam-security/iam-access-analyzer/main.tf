@@ -59,11 +59,11 @@ resource "aws_codepipeline" "iam_validation" {
       version         = "1"
 
       configuration = {
-        ActionMode    = "CREATE_UPDATE"
-        StackName     = "iam-policies"
-        TemplatePath  = "source_output::iam-policies.yaml"
-        RoleArn       = aws_iam_role.cloudformation.arn
-        Capabilities  = "CAPABILITY_NAMED_IAM"
+        ActionMode   = "CREATE_UPDATE"
+        StackName    = "iam-policies"
+        TemplatePath = "source_output::iam-policies.yaml"
+        RoleArn      = aws_iam_role.cloudformation.arn
+        Capabilities = "CAPABILITY_NAMED_IAM"
       }
     }
   }
@@ -142,8 +142,8 @@ resource "aws_iam_role" "codepipeline" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "codepipeline.amazonaws.com" }
     }]
   })
@@ -155,8 +155,8 @@ resource "aws_iam_role" "codebuild" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "codebuild.amazonaws.com" }
     }]
   })
@@ -182,8 +182,8 @@ resource "aws_iam_role" "cloudformation" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "cloudformation.amazonaws.com" }
     }]
   })

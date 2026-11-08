@@ -1,24 +1,29 @@
 # AWS WAF Security Automations
+#
+# Deploys the AWS Solutions "Security Automations for AWS WAF" CloudFormation
+# template (there is no Terraform registry module for it). For
+# endpoint_type = "CloudFront", apply this in us-east-1.
 
-module "waf_security_automations" {
-  source  = "aws-ia/waf-security-automations/aws"
-  version = "~> 3.0"
+locals {
+  template_url = "https://solutions-reference.s3.amazonaws.com/aws-waf-security-automations/latest/aws-waf-security-automations.template"
+}
 
-  activate_http_flood_protection          = true
-  activate_scanner_probe_protection       = true
-  activate_reputation_list_protection     = true
-  activate_bad_bot_protection             = true
-  activate_sql_injection_protection       = true
-  activate_xss_protection                 = true
+resource "aws_cloudformation_stack" "waf_security_automations" {
+  name         = var.stack_name
+  template_url = local.template_url
+  capabilities = ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
 
-  endpoint_type = var.endpoint_type # ALB, CLOUDFRONT, or APIGATEWAY
-
-  # Rate limiting
-  request_threshold           = var.request_threshold
-  request_threshold_by_country = var.request_threshold_by_country
-
-  # Logging
-  access_log_bucket = var.log_bucket
+  parameters = {
+    EndpointType                              = var.endpoint_type
+    AppAccessLogBucket                        = var.log_bucket
+    RequestThreshold                          = var.request_threshold
+    ActivateHttpFloodProtectionParam          = "yes - AWS WAF rate based rule"
+    ActivateScannersProbesProtectionParam     = "yes - AWS Lambda log parser"
+    ActivateReputationListsProtectionParam    = "yes"
+    ActivateBadBotProtectionParam             = "yes"
+    ActivateSqlInjectionProtectionParam       = "yes"
+    ActivateCrossSiteScriptingProtectionParam = "yes"
+  }
 
   tags = var.tags
 }
@@ -26,31 +31,40 @@ module "waf_security_automations" {
 resource "aws_wafv2_web_acl_association" "main" {
   count        = var.resource_arn != "" ? 1 : 0
   resource_arn = var.resource_arn
-  web_acl_arn  = module.waf_security_automations.web_acl_arn
+  web_acl_arn  = aws_cloudformation_stack.waf_security_automations.outputs["WAFWebACLArn"]
+}
+
+variable "stack_name" {
+  type    = string
+  default = "aws-waf-security-automations"
 }
 
 variable "endpoint_type" {
-  type    = string
-  default = "ALB"
+  description = "Resource type the web ACL protects: ALB or CloudFront."
+  type        = string
+  default     = "ALB"
+
+  validation {
+    condition     = contains(["ALB", "CloudFront"], var.endpoint_type)
+    error_message = "endpoint_type must be ALB or CloudFront."
+  }
 }
 
 variable "request_threshold" {
-  type    = number
-  default = 2000
-}
-
-variable "request_threshold_by_country" {
-  type    = number
-  default = 50
+  description = "Maximum requests per 5 minutes from a single IP before it is blocked."
+  type        = number
+  default     = 2000
 }
 
 variable "log_bucket" {
-  type = string
+  description = "Name of the S3 bucket that receives the application access logs."
+  type        = string
 }
 
 variable "resource_arn" {
-  type    = string
-  default = ""
+  description = "ARN of an ALB to associate with the web ACL. Leave empty to skip (CloudFront associates through the distribution)."
+  type        = string
+  default     = ""
 }
 
 variable "tags" {
@@ -59,5 +73,5 @@ variable "tags" {
 }
 
 output "web_acl_arn" {
-  value = module.waf_security_automations.web_acl_arn
+  value = aws_cloudformation_stack.waf_security_automations.outputs["WAFWebACLArn"]
 }

@@ -124,8 +124,8 @@ resource "aws_iam_role" "codebuild" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "codebuild.amazonaws.com" }
     }]
   })
@@ -139,18 +139,18 @@ resource "aws_iam_role_policy" "codebuild" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = ["sts:AssumeRole"]
+        Effect   = "Allow"
+        Action   = ["sts:AssumeRole"]
         Resource = [for id in var.account_ids : "arn:aws:iam::${id}:role/${var.cross_account_role_name}"]
       },
       {
-        Effect = "Allow"
-        Action = ["s3:PutObject", "s3:GetObject"]
+        Effect   = "Allow"
+        Action   = ["s3:PutObject", "s3:GetObject"]
         Resource = ["${aws_s3_bucket.reports.arn}/*"]
       },
       {
-        Effect = "Allow"
-        Action = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+        Effect   = "Allow"
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = ["*"]
       }
     ]
@@ -163,8 +163,8 @@ resource "aws_iam_role" "eventbridge" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "events.amazonaws.com" }
     }]
   })
