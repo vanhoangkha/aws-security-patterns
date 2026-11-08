@@ -69,7 +69,7 @@ Collection of AWS security automation patterns based on [AWS Prescriptive Guidan
 - Hardened container image pipeline
 - Git repository scanning
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone repo
@@ -83,19 +83,19 @@ terraform plan
 terraform apply
 ```
 
-## 📋 Prerequisites
+## Prerequisites
 
 - AWS CLI configured
 - Terraform >= 1.0
 - AWS CDK (for CDK patterns)
 - Python 3.9+ (for Lambda functions)
 
-## 📚 References
+## References
 
 - [AWS Prescriptive Guidance - Security Patterns](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/securityandcompliance-pattern-list.html)
 - [AWS Security Best Practices](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
 - [AWS Security Hub](https://docs.aws.amazon.com/securityhub/)
 
-## 📄 License
+## License
 
 MIT License
