@@ -10,4 +10,4 @@ Do NOT create public issues for security vulnerabilities.
 
 | Version | Supported |
 |---------|-----------|
-| main    | ✅        |
+| main    | Yes        |
