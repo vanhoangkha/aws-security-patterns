@@ -23,8 +23,8 @@ resource "aws_cloudwatch_event_rule" "config_compliance" {
     source      = ["aws.config"]
     detail-type = ["Config Rules Compliance Change"]
     detail = {
-      configRuleName  = [aws_config_config_rule.iam_access_key_rotation.name]
-      complianceType  = ["NON_COMPLIANT"]
+      configRuleName = [aws_config_config_rule.iam_access_key_rotation.name]
+      complianceType = ["NON_COMPLIANT"]
     }
   })
 }

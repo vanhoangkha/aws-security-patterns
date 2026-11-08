@@ -9,16 +9,16 @@ resource "aws_organizations_policy" "deny_internet" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "DenyInternetGateway"
-        Effect    = "Deny"
-        Action    = [
+        Sid    = "DenyInternetGateway"
+        Effect = "Deny"
+        Action = [
           "ec2:AttachInternetGateway",
           "ec2:CreateInternetGateway",
           "ec2:CreateEgressOnlyInternetGateway",
           "ec2:CreateVpcPeeringConnection",
           "ec2:AcceptVpcPeeringConnection"
         ]
-        Resource  = "*"
+        Resource = "*"
         Condition = {
           StringNotLike = {
             "aws:PrincipalArn" = var.exception_roles
@@ -26,13 +26,13 @@ resource "aws_organizations_policy" "deny_internet" {
         }
       },
       {
-        Sid       = "DenyPublicSubnet"
-        Effect    = "Deny"
-        Action    = [
+        Sid    = "DenyPublicSubnet"
+        Effect = "Deny"
+        Action = [
           "ec2:CreateRoute",
           "ec2:ReplaceRoute"
         ]
-        Resource  = "*"
+        Resource = "*"
         Condition = {
           StringEquals = {
             "ec2:GatewayType" = "igw"
@@ -43,12 +43,12 @@ resource "aws_organizations_policy" "deny_internet" {
         }
       },
       {
-        Sid       = "DenyPublicIP"
-        Effect    = "Deny"
-        Action    = [
+        Sid    = "DenyPublicIP"
+        Effect = "Deny"
+        Action = [
           "ec2:RunInstances"
         ]
-        Resource  = "arn:aws:ec2:*:*:network-interface/*"
+        Resource = "arn:aws:ec2:*:*:network-interface/*"
         Condition = {
           Bool = {
             "ec2:AssociatePublicIpAddress" = "true"

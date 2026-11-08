@@ -30,7 +30,7 @@ variable "guard_rules" {
   }))
   default = {
     "s3-bucket-encryption" = {
-      policy = <<-GUARD
+      policy         = <<-GUARD
         rule s3_bucket_encryption {
           resourceType == "AWS::S3::Bucket"
           configuration.ServerSideEncryptionConfiguration exists
@@ -40,7 +40,7 @@ variable "guard_rules" {
       resource_types = ["AWS::S3::Bucket"]
     }
     "ec2-imdsv2-required" = {
-      policy = <<-GUARD
+      policy         = <<-GUARD
         rule ec2_imdsv2_required {
           resourceType == "AWS::EC2::Instance"
           configuration.MetadataOptions.HttpTokens == "required"
@@ -49,7 +49,7 @@ variable "guard_rules" {
       resource_types = ["AWS::EC2::Instance"]
     }
     "rds-multi-az" = {
-      policy = <<-GUARD
+      policy         = <<-GUARD
         rule rds_multi_az {
           resourceType == "AWS::RDS::DBInstance"
           configuration.MultiAZ == true
@@ -64,23 +64,19 @@ variable "guard_rules" {
 resource "aws_config_remediation_configuration" "s3_encryption" {
   config_rule_name = aws_config_config_rule.custom_guard["s3-bucket-encryption"].name
 
-  resource_type    = "AWS::S3::Bucket"
-  target_type      = "SSM_DOCUMENT"
-  target_id        = "AWS-EnableS3BucketEncryption"
-  target_version   = "1"
+  resource_type  = "AWS::S3::Bucket"
+  target_type    = "SSM_DOCUMENT"
+  target_id      = "AWS-EnableS3BucketEncryption"
+  target_version = "1"
 
   parameter {
-    name         = "BucketName"
-    resource_value {
-      value = "RESOURCE_ID"
-    }
+    name           = "BucketName"
+    resource_value = "RESOURCE_ID"
   }
 
   parameter {
     name         = "SSEAlgorithm"
-    static_value {
-      values = ["aws:kms"]
-    }
+    static_value = "aws:kms"
   }
 
   automatic                  = var.auto_remediate
